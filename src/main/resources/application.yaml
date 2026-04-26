@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: springollamasample
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen3-coder
+
