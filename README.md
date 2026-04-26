@@ -29,7 +29,7 @@ curl "http://localhost:8080/api/chat?message=Hello"
 ### 2. Analyze Webpage
 
 ```bash
-curl -G "http://localhost:8080/api/web-chat/with-url" \
+curl -G "http://localhost:8080/api/web-chat/fetch" \
   --data-urlencode "message=Summarize this page" \
   --data-urlencode "url=https://example.com"
 ```
@@ -37,6 +37,6 @@ curl -G "http://localhost:8080/api/web-chat/with-url" \
 ### 3. Web Search + AI Answer
 
 ```bash
-curl -G "http://localhost:8080/api/web-chat/with-search" \
+curl -G "http://localhost:8080/api/web-chat/search" \
   --data-urlencode "query=What is Spring Boot?"
 ```

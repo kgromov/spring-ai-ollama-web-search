@@ -1,0 +1,8 @@
+###
+GET http://localhost:8080/api/chat?message=Hello, how are you?
+
+###
+GET http://localhost:8080/api/web-chat/fetch?message=Summarize this page&url=https://example.com
+
+###
+GET http://localhost:8080/api/web-chat/search?query=What is Spring Boot?
