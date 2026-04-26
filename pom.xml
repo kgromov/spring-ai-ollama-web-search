@@ -8,11 +8,12 @@
 		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>springollamasample</artifactId>
+	<groupId>org.kgromov</groupId>
+	<artifactId>spring-ai-ollama-web-search</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>springollamasample</name>
+
+    <name>Spring AI Ollama Web Search show case application</name>
 	<description>Demo project for Spring AI using ollama</description>
 	<url/>
 	<licenses>

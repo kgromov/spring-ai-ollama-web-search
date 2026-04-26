@@ -1,6 +1,6 @@
 spring:
   application:
-    name: springollamasample
+    name: spring-ai-ollama-web-search
   ai:
     ollama:
       base-url: http://localhost:11434
