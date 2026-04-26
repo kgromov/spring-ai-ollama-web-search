@@ -8,3 +8,8 @@ spring:
         options:
           model: qwen3-coder
 
+web:
+  search:
+    engineUrl: https://html.duckduckgo.com/html/?q=
+    timeout: 10000
+    maxContentLength: 2000

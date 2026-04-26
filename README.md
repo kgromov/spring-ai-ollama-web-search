@@ -9,8 +9,8 @@ Spring Boot + Ollama AI with web scraping capabilities. Chat with AI that can fe
 - Java 21+ | Maven 3.6+ | [Ollama](https://ollama.ai) 
 
 ```bash
-# Install and start Ollama
-ollama pull qwen3-coder:30b
+# Start Ollama with qwen3-coder or any preferred model
+ollama pull qwen3-coder:latest
 
 # Run the application
 mvn spring-boot:run
