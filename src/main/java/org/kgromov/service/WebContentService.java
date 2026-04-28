@@ -35,7 +35,7 @@ public class WebContentService {
         String searchUrl = webSearchConfig.engineUrl() + query.replace(" ", "+");
         try {
             log.info("Searching for: {}", query);
-            Document doc = fetchPageContent(searchUrl);
+            Document doc = this.fetchPageContent(searchUrl);
             StringBuilder results = new StringBuilder();
             results.append("Search results for: ").append(query).append("\n\n");
             doc.select("div.result").stream()

@@ -1,8 +1,11 @@
 package org.kgromov.config;
 
+import org.kgromov.tools.WebTools;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
+import org.springframework.ai.support.ToolCallbacks;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +53,11 @@ public class OllamaConfig {
                 .ollamaApi(api)
                 .defaultOptions(options)
                 .build();
+    }
+
+    @Bean
+    public List<ToolCallback> webSearchTools(WebTools webTools) {
+        return List.of(ToolCallbacks.from(webTools));
     }
 }
 
