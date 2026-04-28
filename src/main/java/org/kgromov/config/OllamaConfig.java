@@ -25,7 +25,7 @@ public class OllamaConfig {
     private String model;
 
     @Bean
-    public OllamaChatModel ollamaChatModel() {
+    public OllamaChatModel ollamaChatModel(List<ToolCallback> webSearchTools) {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(List.of(
                 MediaType.APPLICATION_JSON,
@@ -47,6 +47,7 @@ public class OllamaConfig {
         var options = OllamaChatOptions.builder()
                 .model(model)
                 .temperature(0.7)
+                .toolCallbacks(webSearchTools)
                 .build();
         
         return OllamaChatModel.builder()

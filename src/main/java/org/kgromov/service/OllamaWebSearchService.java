@@ -1,48 +1,50 @@
 package org.kgromov.service;
 
-
 import lombok.AllArgsConstructor;
-import org.kgromov.tools.WebTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class OllamaWebSearchService {
     private final OllamaChatModel chatModel;
-    private final WebTools webTools;
 
     public String fetch(String query, String url) {
         return ChatClient.builder(chatModel)
-//                .defaultToolNames("web_fetch")
-                .defaultToolCallbacks(ToolCallbacks.from(webTools))
                 .defaultSystem("""
-                                You are a helpful assistant to fetch web content by provided {{url}} to answer the user's question.
-                                If the web content doesn't contain relevant information, say so and provide a general answer
-                                """)
-                .defaultUser("Based on fetched web content, please answer {{query}}")
+                        You are a helpful assistant.
+                        You MUST immediately call the web_fetch tool with the provided URL without asking any questions.
+                        After fetching, answer the user's question based on the content.
+                        If the content is not relevant, provide a general answer.
+                        """)
                 .build()
                 .prompt()
-                .system(sp -> sp.param("url", url))
-                .user(up -> up.param("query", query))
+                .user("Call web_fetch with url=\"%s\" and then answer: %s".formatted(url, query))
                 .call()
                 .content();
     }
 
     public String search(String query) {
         return ChatClient.builder(chatModel)
-//                .defaultToolNames("web_search")
-                .defaultToolCallbacks(ToolCallbacks.from(webTools))
-                .defaultSystem("""
-                                You are a helpful assistant. Use the provided {{search_results}} to answer the user's question.
-                                Synthesize information from multiple sources if available. Cite sources when relevant
-                                """)
-                .defaultUser("Based on the above search results, please answer {{query}}")
                 .build()
                 .prompt()
-                .user(up -> up.param("query", query))
+                .user(query)
+                .call()
+                .content();
+    }
+
+    public String search_with_prompt(String query) {
+        return ChatClient.builder(chatModel)
+                .defaultSystem("""
+                        You are a helpful assistant.
+                        You MUST immediately call the web_search tool by provided user query without asking any questions.
+                        Use the provided search results to answer the user's question.
+                        Synthesize information from multiple sources if available. Cite sources when relevant
+                        """)
+                .build()
+                .prompt()
+                .user("Call web_search ti answer: %s".formatted(query))
                 .call()
                 .content();
     }
