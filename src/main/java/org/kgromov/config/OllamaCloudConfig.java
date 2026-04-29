@@ -16,43 +16,40 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
-@Profile({"default", "!cloud"})
+@Profile({"cloud"})
 @Configuration
-public class OllamaConfig {
+public class OllamaCloudConfig {
 
-    @Value("${spring.ai.ollama.base-url:http://localhost:11434}")
+    @Value("${spring.ai.ollama.base-url")
     private String baseUrl;
 
-    @Value("${spring.ai.ollama.chat.options.model:qwen3-coder:30b}")
+    @Value("${spring.ai.ollama.chat.options.model}")
     private String model;
 
     @Bean
-    RestClient.Builder restClientBuilder() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(List.of(
-                MediaType.APPLICATION_JSON,
-                MediaType.TEXT_PLAIN,
-                new MediaType("application", "*+json")
-        ));
+    RestClient.Builder restClientBuilder(WebSearchConfig webSearchConfig) {
         return RestClient.builder()
-                .messageConverters(converters -> {
-                    converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
-                    converters.add(converter);
-                });
+                .baseUrl(webSearchConfig.engineUrl())
+                .defaultHeaders(header -> header.setContentType(MediaType.APPLICATION_JSON))
+                .defaultHeaders(header -> header.setBearerAuth(webSearchConfig.apiKey()));
     }
 
     @Bean
-    public OllamaChatModel ollamaChatModel( RestClient.Builder restClientBuilder, List<ToolCallback> webSearchTools) {
+    RestClient ollamaRestClient(RestClient.Builder restClientBuilder) {
+        return restClientBuilder.build();
+    }
+
+    @Bean
+    public OllamaChatModel ollamaChatModel(RestClient.Builder restClientBuilder, List<ToolCallback> webSearchTools) {
         var api = OllamaApi.builder()
                 .baseUrl(baseUrl)
+                .restClientBuilder(restClientBuilder)
                 .build();
-        
         var options = OllamaChatOptions.builder()
                 .model(model)
                 .temperature(0.7)
                 .toolCallbacks(webSearchTools)
                 .build();
-        
         return OllamaChatModel.builder()
                 .ollamaApi(api)
                 .defaultOptions(options)

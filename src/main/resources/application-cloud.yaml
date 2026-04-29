@@ -7,8 +7,7 @@ spring:
 #          model: gpt-oss:120b
           model: minimax-m2.7:cloud
 
-#web:
-#  search:
-#    engineUrl: https://ollama.com/api/web_search
-#    timeout: 10000
-#    maxContentLength: 2000
+web:
+  search:
+    engineUrl: https://ollama.com/api/web_search
+    api-key: ${OLLAMA_API_KEY}}

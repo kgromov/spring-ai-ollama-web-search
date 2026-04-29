@@ -15,10 +15,10 @@ import java.util.List;
 public class WebEnhancedChatService {
 
     private final OllamaChatModel chatModel;
-    private final WebContentService webContentService;
+    private final JsoupWebContentService jsoupWebContentService;
 
     public String replyWithWebContext(String userQuery, String url) {
-        String webContent = webContentService.fetchWebContent(url);
+        String webContent = jsoupWebContentService.fetchWebContent(url);
         
         SystemMessage systemMessage = new SystemMessage(
             "You are a helpful assistant. Use the provided web content to answer the user's question. " +
@@ -37,7 +37,7 @@ public class WebEnhancedChatService {
     }
 
     public String replyWithWebSearch(String query) {
-        String searchResults = webContentService.searchAndFetch(query);
+        String searchResults = jsoupWebContentService.searchWebContent(query);
         
         SystemMessage systemMessage = new SystemMessage(
             "You are a helpful assistant. Use the provided search results to answer the user's question. " +

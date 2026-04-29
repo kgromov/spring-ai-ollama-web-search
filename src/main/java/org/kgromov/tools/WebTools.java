@@ -18,6 +18,6 @@ public class WebTools {
 
     @Tool(name = "web_search", description = "Tool to search web content by provided query")
     public String search(@ToolParam(description = "The user query to search for") String query) {
-        return webContentService.searchAndFetch(query);
+        return webContentService.searchWebContent(query);
     }
 }
