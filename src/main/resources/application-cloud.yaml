@@ -1,7 +1,7 @@
 spring:
-  ai:
-    ollama:
-      base-url: https://ollama.com/api
+#  ai:
+#    ollama:
+#      base-url: https://ollama.com/api
       chat:
         options:
 #          model: gpt-oss:120b
