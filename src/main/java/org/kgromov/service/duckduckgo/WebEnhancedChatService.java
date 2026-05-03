@@ -1,6 +1,7 @@
-package org.kgromov.service;
+package org.kgromov.service.duckduckgo;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.kgromov.service.WebSearchService;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -11,15 +12,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Profile("!cloud")
+@Profile("direct")
 @Service
-@AllArgsConstructor
-public class WebEnhancedChatService {
+@RequiredArgsConstructor
+public class WebEnhancedChatService implements WebSearchService {
 
     private final OllamaChatModel chatModel;
     private final JsoupWebContentService jsoupWebContentService;
 
-    public String replyWithWebContext(String userQuery, String url) {
+    @Override
+    public String fetch(String userQuery, String url) {
         String webContent = jsoupWebContentService.fetchWebContent(url);
         
         SystemMessage systemMessage = new SystemMessage(
@@ -38,7 +40,8 @@ public class WebEnhancedChatService {
         return response.getResult().getOutput().getText();
     }
 
-    public String replyWithWebSearch(String query) {
+    @Override
+    public String search(String query) {
         String searchResults = jsoupWebContentService.searchWebContent(query);
         
         SystemMessage systemMessage = new SystemMessage(

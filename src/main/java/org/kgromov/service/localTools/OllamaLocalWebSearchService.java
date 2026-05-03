@@ -1,13 +1,16 @@
-package org.kgromov.service;
+package org.kgromov.service.localTools;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.kgromov.service.WebSearchService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+@Profile({"default", "local", "!cloud", "!direct"})
 @Service
-@AllArgsConstructor
-public class OllamaWebSearchService {
+@RequiredArgsConstructor
+public class OllamaLocalWebSearchService implements WebSearchService {
     private final OllamaChatModel chatModel;
 
     public String fetch(String query, String url) {

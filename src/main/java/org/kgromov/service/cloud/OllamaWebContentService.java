@@ -1,8 +1,9 @@
-package org.kgromov.service;
+package org.kgromov.service.cloud;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kgromov.service.WebContentService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

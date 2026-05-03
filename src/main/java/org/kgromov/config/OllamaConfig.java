@@ -9,14 +9,13 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
-@Profile({"default", "!cloud"})
+
 @Configuration
 public class OllamaConfig {
 
@@ -45,14 +44,13 @@ public class OllamaConfig {
     public OllamaChatModel ollamaChatModel( RestClient.Builder restClientBuilder, List<ToolCallback> webSearchTools) {
         var api = OllamaApi.builder()
                 .baseUrl(baseUrl)
+                .restClientBuilder(restClientBuilder)
                 .build();
-        
         var options = OllamaChatOptions.builder()
                 .model(model)
                 .temperature(0.7)
                 .toolCallbacks(webSearchTools)
                 .build();
-        
         return OllamaChatModel.builder()
                 .ollamaApi(api)
                 .defaultOptions(options)

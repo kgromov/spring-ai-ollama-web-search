@@ -2,7 +2,7 @@ package org.kgromov.controller;
 
 import org.junit.jupiter.api.Test;
 import org.kgromov.config.WebSearchConfig;
-import org.kgromov.service.WebEnhancedChatService;
+import org.kgromov.service.duckduckgo.WebEnhancedChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,7 +32,7 @@ class WebSearchChatControllerTest {
         String url = "https://example.com";
         String expectedResponse = "This page is about domain examples.";
 
-        when(webEnhancedChatService.replyWithWebContext(message, url))
+        when(webEnhancedChatService.fetch(message, url))
                 .thenReturn(expectedResponse);
 
         mockMvc.perform(get("/api/web-chat/fetch")
@@ -47,7 +47,7 @@ class WebSearchChatControllerTest {
         String query = "What is Spring Boot?";
         String expectedResponse = "Spring Boot is a framework for building Java applications.";
 
-        when(webEnhancedChatService.replyWithWebSearch(query))
+        when(webEnhancedChatService.search(query))
                 .thenReturn(expectedResponse);
 
         mockMvc.perform(get("/api/web-chat/search")

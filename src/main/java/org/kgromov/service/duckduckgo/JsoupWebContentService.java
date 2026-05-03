@@ -1,10 +1,11 @@
-package org.kgromov.service;
+package org.kgromov.service.duckduckgo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.kgromov.config.WebSearchConfig;
+import org.kgromov.service.WebContentService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

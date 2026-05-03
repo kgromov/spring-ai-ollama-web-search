@@ -3,6 +3,7 @@ package org.kgromov.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kgromov.config.WebSearchConfig;
+import org.kgromov.service.duckduckgo.JsoupWebContentService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
