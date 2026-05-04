@@ -1,4 +1,4 @@
 web:
   search:
     engineUrl: https://ollama.com/api
-    api-key: ${OLLAMA_API_KEY}}
+    api-key: ${OLLAMA_API_KEY}
