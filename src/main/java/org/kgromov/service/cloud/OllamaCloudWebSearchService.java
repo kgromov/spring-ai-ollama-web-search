@@ -2,6 +2,7 @@ package org.kgromov.service.cloud;
 
 import org.kgromov.service.WebSearchService;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
@@ -23,6 +24,7 @@ public class OllamaCloudWebSearchService implements WebSearchService {
 
     public String fetch(String query, String url) {
         return ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor())
                 .defaultSystem("""
                         You are a helpful assistant.
                         You MUST immediately call the web_fetch tool with the provided URL without asking any questions.
@@ -38,6 +40,7 @@ public class OllamaCloudWebSearchService implements WebSearchService {
 
     public String search(String query) {
         return ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build()
                 .prompt()
                 .user(query)
@@ -47,6 +50,7 @@ public class OllamaCloudWebSearchService implements WebSearchService {
 
     public String search_with_prompt(String query) {
         return ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor())
                 .defaultSystem("""
                         You are a helpful assistant.
                         You MUST immediately call the web_search tool by provided user query without asking any questions.
