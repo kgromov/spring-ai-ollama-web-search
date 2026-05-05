@@ -15,6 +15,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+
 @Configuration
 public class OllamaConfig {
 
@@ -25,31 +26,31 @@ public class OllamaConfig {
     private String model;
 
     @Bean
-    public OllamaChatModel ollamaChatModel(List<ToolCallback> webSearchTools) {
+    RestClient.Builder restClientBuilder() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(List.of(
                 MediaType.APPLICATION_JSON,
                 MediaType.TEXT_PLAIN,
                 new MediaType("application", "*+json")
         ));
-        
-        RestClient.Builder restClientBuilder = RestClient.builder()
+        return RestClient.builder()
                 .messageConverters(converters -> {
                     converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
                     converters.add(converter);
                 });
-        
+    }
+
+    @Bean
+    public OllamaChatModel ollamaChatModel( RestClient.Builder restClientBuilder, List<ToolCallback> webSearchTools) {
         var api = OllamaApi.builder()
                 .baseUrl(baseUrl)
                 .restClientBuilder(restClientBuilder)
                 .build();
-        
         var options = OllamaChatOptions.builder()
                 .model(model)
                 .temperature(0.7)
                 .toolCallbacks(webSearchTools)
                 .build();
-        
         return OllamaChatModel.builder()
                 .ollamaApi(api)
                 .defaultOptions(options)

@@ -1,0 +1,9 @@
+web:
+  search:
+    engineUrl: https://ollama.com/api
+    api-key: ${OLLAMA_API_KEY}
+
+logging:
+  level:
+    org.kgromov.config: DEBUG
+    org.springframework.ai.chat.client: DEBUG
