@@ -1,29 +1,21 @@
 package org.kgromov.service.cloud;
 
+import lombok.RequiredArgsConstructor;
 import org.kgromov.service.WebSearchService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.ai.ollama.api.OllamaApi;
-import org.springframework.ai.ollama.api.OllamaChatOptions;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Profile("cloud")
 @Service
+@RequiredArgsConstructor
 public class OllamaCloudWebSearchService implements WebSearchService {
-    private final ChatModel chatModel;
-
-    public OllamaCloudWebSearchService(List<ToolCallback> webSearchTools) {
-        this.chatModel = this.chatModel(webSearchTools);
-    }
+    private final OllamaChatModel ollamaCloudChatModel;
 
     public String fetch(String query, String url) {
-        return ChatClient.builder(chatModel)
+        return ChatClient.builder(ollamaCloudChatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .defaultSystem("""
                         You are a helpful assistant.
@@ -39,7 +31,7 @@ public class OllamaCloudWebSearchService implements WebSearchService {
     }
 
     public String search(String query) {
-        return ChatClient.builder(chatModel)
+        return ChatClient.builder(ollamaCloudChatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build()
                 .prompt()
@@ -49,7 +41,7 @@ public class OllamaCloudWebSearchService implements WebSearchService {
     }
 
     public String search_with_prompt(String query) {
-        return ChatClient.builder(chatModel)
+        return ChatClient.builder(ollamaCloudChatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .defaultSystem("""
                         You are a helpful assistant.
@@ -62,18 +54,6 @@ public class OllamaCloudWebSearchService implements WebSearchService {
                 .user("Call web_search ti answer: %s".formatted(query))
                 .call()
                 .content();
-    }
-
-    private ChatModel chatModel(List<ToolCallback> webSearchTools) {
-        var options = OllamaChatOptions.builder()
-                .model("minimax-m2.7:cloud")
-                .temperature(0.7)
-                .toolCallbacks(webSearchTools)
-                .build();
-        return OllamaChatModel.builder()
-                .ollamaApi(OllamaApi.builder().build())
-                .defaultOptions(options)
-                .build();
     }
 }
 

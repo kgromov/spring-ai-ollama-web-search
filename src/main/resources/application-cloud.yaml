@@ -1,6 +1,17 @@
+spring:
+  application:
+    name: spring-ai-ollama-web-search
+  ai:
+    ollama:
+      base-url: https://ollama.com
+      chat:
+        options:
+          model: gpt-oss:120b
+#          model: minimax-m2.7:cloud
+
 web:
   search:
-    engineUrl: https://ollama.com/api
+    engineUrl: https://ollama.com
     api-key: ${OLLAMA_API_KEY}
 
 logging:

@@ -1,6 +1,11 @@
 package org.kgromov.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.ollama.api.OllamaApi;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,6 +17,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -20,14 +26,43 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Configuration
 public class OllamaCloudConfig {
 
+    @Value("${spring.ai.ollama.base-url}")
+    private String baseUrl;
+
+
+    @Value("${spring.ai.ollama.chat.options.model}")
+    private String model;
+
     @Bean
-    RestClient ollamaRestClient(WebSearchConfig webSearchConfig) {
+    private static RestClient.Builder ollamaResClientBuilder(WebSearchConfig webSearchConfig) {
         return RestClient.builder()
                 .baseUrl(webSearchConfig.engineUrl())
                 .requestInterceptor(new LoggingInterceptor())
                 .defaultHeaders(header -> header.setContentType(MediaType.APPLICATION_JSON))
-                .defaultHeaders(header -> header.setBearerAuth(webSearchConfig.apiKey()))
+                .defaultHeaders(header -> header.setBearerAuth(webSearchConfig.apiKey()));
+    }
+
+    @Bean
+    public OllamaChatModel ollamaCloudChatModel(RestClient.Builder restClientBuilder,
+                                                List<ToolCallback> webSearchTools) {
+        var api = OllamaApi.builder()
+                .baseUrl(baseUrl)
+                .restClientBuilder(restClientBuilder)
                 .build();
+        var options = OllamaChatOptions.builder()
+                .model(model)
+                .temperature(0.7)
+                .toolCallbacks(webSearchTools)
+                .build();
+        return OllamaChatModel.builder()
+                .ollamaApi(api)
+                .defaultOptions(options)
+                .build();
+    }
+
+    @Bean
+    RestClient ollamaRestClient(RestClient.Builder ollamaResClientBuilder) {
+        return ollamaResClientBuilder.build();
     }
 
     @Slf4j

@@ -21,7 +21,7 @@ public class OllamaWebContentService implements WebContentService {
     @Override
     public String fetchWebContent(String url) {
         return ollamaRestClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/web_fetch").build())
+                .uri(uriBuilder -> uriBuilder.path("api").path("web_fetch").build())
                 .body(Map.of("url", url))
                 .retrieve()
                 .toEntity(JsonNode.class)
@@ -31,7 +31,7 @@ public class OllamaWebContentService implements WebContentService {
     @Override
     public String searchWebContent(String query) {
         return ollamaRestClient.post()
-                .uri(uriBuilder ->  uriBuilder.path("/web_search").build())
+                .uri(uriBuilder ->  uriBuilder.path("api").path("web_search").build())
                 .body(Map.of("query", query))
                 .retrieve()
                 .toEntity(JsonNode.class)
